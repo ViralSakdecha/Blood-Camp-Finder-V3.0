@@ -1,0 +1,743 @@
+[
+  {
+    "name": "Red Cross Blood Bank",
+    "address": "Civil Hospital, Rajkot",
+    "phone": "0281-2456789",
+    "blood_required": [
+      "A+",
+      "B-",
+      "AB+"
+    ],
+    "latitude": 22.2875,
+    "longitude": 70.7684,
+    "is_blood_camp": false,
+    "organized_by": "Indian Red Cross Society",
+    "hours_active": "10:00 AM - 4:00 PM",
+    "start_date": "2025-07-25",
+    "end_date": "2025-07-25",
+    "city": "Rajkot",
+    "state": "Gujarat"
+  },
+  {
+    "name": "Jeevandeep Blood Bank",
+    "address": "Opp. Cancer Hospital, Rajkot",
+    "phone": "0281-2780020",
+    "blood_required": [
+      "O+",
+      "A-",
+      "B+"
+    ],
+    "latitude": 22.2987,
+    "longitude": 70.7752,
+    "is_blood_camp": true,
+    "organized_by": "Jeevandeep Charitable Trust",
+    "hours_active": "10:00 AM - 4:00 PM",
+    "start_date": "2025-07-15",
+    "end_date": "2025-07-16",
+    "city": "Rajkot",
+    "state": "Gujarat"
+  },
+  {
+    "name": "Prathama Blood Centre",
+    "address": "V.S. Hospital Campus, Ahmedabad",
+    "phone": "079-26588402",
+    "blood_required": [
+      "O+",
+      "A+",
+      "B+"
+    ],
+    "latitude": 23.0225,
+    "longitude": 72.5714,
+    "is_blood_camp": true,
+    "organized_by": "Prathama Foundation",
+    "hours_active": "09:00 AM - 5:00 PM",
+    "start_date": "2025-07-17",
+    "end_date": "2025-07-17",
+    "city": "Ahmedabad",
+    "state": "Gujarat"
+  },
+  {
+    "name": "Indian Red Cross Society",
+    "address": "Red Cross Bhavan, Ahmedabad",
+    "phone": "079-26577023",
+    "blood_required": [
+      "AB-",
+      "B-",
+      "A-"
+    ],
+    "latitude": 23.0273,
+    "longitude": 72.5800,
+    "is_blood_camp": false,
+    "organized_by": "Indian Red Cross Society",
+    "hours_active": "09:30 AM - 3:00 PM",
+    "start_date": "2025-07-27",
+    "end_date": "2025-07-27",
+    "city": "Ahmedabad",
+    "state": "Gujarat"
+  },
+  {
+    "name": "Surat Raktadan Kendra",
+    "address": "Athwa Gate, Surat",
+    "phone": "0261-2470601",
+    "blood_required": [
+      "O-",
+      "AB+",
+      "B+"
+    ],
+    "latitude": 21.1702,
+    "longitude": 72.8311,
+    "is_blood_camp": true,
+    "organized_by": "Rotary Club Surat",
+    "hours_active": "08:00 AM - 2:00 PM",
+    "start_date": "2025-07-16",
+    "end_date": "2025-07-16",
+    "city": "Surat",
+    "state": "Gujarat"
+  },
+  {
+    "name": "Jalaram Blood Bank",
+    "address": "Near Rupani Circle, Bhavnagar",
+    "phone": "0278-2512350",
+    "blood_required": [
+      "O+",
+      "A+",
+      "B-"
+    ],
+    "latitude": 21.7649,
+    "longitude": 72.1476,
+    "is_blood_camp": true,
+    "organized_by": "Jalaram Charitable Trust",
+    "hours_active": "11:00 AM - 4:00 PM",
+    "start_date": "2025-07-18",
+    "end_date": "2025-07-19",
+    "city": "Bhavnagar",
+    "state": "Gujarat"
+  },
+  {
+    "name": "Red Cross Society Blood Bank",
+    "address": "RC Building, Fatehgunj, Vadodara",
+    "phone": "0265-2786589",
+    "blood_required": [
+      "AB+",
+      "A+",
+      "O+"
+    ],
+    "latitude": 22.3110,
+    "longitude": 73.1800,
+    "is_blood_camp": true,
+    "organized_by": "Red Cross Vadodara",
+    "hours_active": "10:30 AM - 3:30 PM",
+    "start_date": "2025-07-20",
+    "end_date": "2025-07-20",
+    "city": "Vadodara",
+    "state": "Gujarat"
+  },
+  {
+    "name": "GMERS Hospital Blood Bank",
+    "address": "Sector 12, Gandhinagar",
+    "phone": "079-23246301",
+    "blood_required": [
+      "A+",
+      "O+",
+      "AB-"
+    ],
+    "latitude": 23.2230,
+    "longitude": 72.6500,
+    "is_blood_camp": true,
+    "organized_by": "GMERS Medical College",
+    "hours_active": "09:00 AM - 1:00 PM",
+    "start_date": "2025-07-21",
+    "end_date": "2025-07-21",
+    "city": "Gandhinagar",
+    "state": "Gujarat"
+  },
+  {
+    "name": "Red Cross Mehsana Blood Bank",
+    "address": "Near Civil Hospital, Mehsana",
+    "phone": "02762-255555",
+    "blood_required": [
+      "B-",
+      "O-",
+      "AB+"
+    ],
+    "latitude": 23.5880,
+    "longitude": 72.3693,
+    "is_blood_camp": true,
+    "organized_by": "Red Cross Mehsana",
+    "hours_active": "10:00 AM - 1:00 PM",
+    "start_date": "2025-07-24",
+    "end_date": "2025-07-24",
+    "city": "Mehsana",
+    "state": "Gujarat"
+  },
+  {
+    "name": "Lions Blood Bank",
+    "address": "Fortis Hospital, Shalimar Bagh, Delhi",
+    "phone": "011-45123456",
+    "blood_required": [
+      "O+",
+      "B+",
+      "A-"
+    ],
+    "latitude": 28.7041,
+    "longitude": 77.1496,
+    "is_blood_camp": false,
+    "organized_by": "Lions Club International",
+    "hours_active": "08:00 AM - 6:00 PM",
+    "start_date": "2025-07-25",
+    "end_date": "2025-07-25",
+    "city": "Delhi",
+    "state": "Delhi"
+  },
+  {
+    "name": "Rotary Blood Bank",
+    "address": "KEM Hospital Campus, Parel, Mumbai",
+    "phone": "022-24123456",
+    "blood_required": [
+      "AB+",
+      "O-",
+      "B+"
+    ],
+    "latitude": 19.0007,
+    "longitude": 72.8417,
+    "is_blood_camp": true,
+    "organized_by": "Rotary Club Mumbai",
+    "hours_active": "09:00 AM - 5:00 PM",
+    "start_date": "2025-07-18",
+    "end_date": "2025-07-19",
+    "city": "Mumbai",
+    "state": "Maharashtra"
+  },
+  {
+    "name": "Bangalore Blood Bank",
+    "address": "Victoria Hospital Campus, Bengaluru",
+    "phone": "080-26712345",
+    "blood_required": [
+      "A+",
+      "B+",
+      "AB-"
+    ],
+    "latitude": 12.9716,
+    "longitude": 77.5946,
+    "is_blood_camp": false,
+    "organized_by": "Karnataka Health Department",
+    "hours_active": "09:30 AM - 4:30 PM",
+    "start_date": "2025-07-22",
+    "end_date": "2025-07-22",
+    "city": "Bengaluru",
+    "state": "Karnataka"
+  },
+  {
+    "name": "Chennai Central Blood Bank",
+    "address": "Government General Hospital, Chennai",
+    "phone": "044-25312345",
+    "blood_required": [
+      "O+",
+      "A-",
+      "B-"
+    ],
+    "latitude": 13.0827,
+    "longitude": 80.2707,
+    "is_blood_camp": true,
+    "organized_by": "Tamil Nadu Health Services",
+    "hours_active": "08:30 AM - 3:30 PM",
+    "start_date": "2025-07-23",
+    "end_date": "2025-07-23",
+    "city": "Chennai",
+    "state": "Tamil Nadu"
+  },
+  {
+    "name": "Kolkata Blood Donation Centre",
+    "address": "SSKM Hospital, Bhowanipore, Kolkata",
+    "phone": "033-24612345",
+    "blood_required": [
+      "AB+",
+      "O+",
+      "A+"
+    ],
+    "latitude": 22.5359,
+    "longitude": 88.3474,
+    "is_blood_camp": false,
+    "organized_by": "West Bengal Health Department",
+    "hours_active": "10:00 AM - 5:00 PM",
+    "start_date": "2025-07-26",
+    "end_date": "2025-07-26",
+    "city": "Kolkata",
+    "state": "West Bengal"
+  },
+  {
+    "name": "Hyderabad Central Blood Bank",
+    "address": "Osmania General Hospital, Hyderabad",
+    "phone": "040-27812345",
+    "blood_required": [
+      "B+",
+      "O-",
+      "AB-"
+    ],
+    "latitude": 17.3850,
+    "longitude": 78.4867,
+    "is_blood_camp": true,
+    "organized_by": "Telangana Health Department",
+    "hours_active": "09:00 AM - 4:00 PM",
+    "start_date": "2025-07-28",
+    "end_date": "2025-07-28",
+    "city": "Hyderabad",
+    "state": "Telangana"
+  },
+  {
+    "name": "Pune Blood Donation Camp",
+    "address": "Sassoon Hospital, Pune",
+    "phone": "020-26123456",
+    "blood_required": [
+      "A+",
+      "B+",
+      "O+"
+    ],
+    "latitude": 18.5204,
+    "longitude": 73.8567,
+    "is_blood_camp": true,
+    "organized_by": "Pune Municipal Corporation",
+    "hours_active": "08:00 AM - 2:00 PM",
+    "start_date": "2025-07-29",
+    "end_date": "2025-07-29",
+    "city": "Pune",
+    "state": "Maharashtra"
+  },
+  {
+    "name": "Jaipur Blood Bank",
+    "address": "SMS Hospital, Jaipur",
+    "phone": "0141-2512345",
+    "blood_required": [
+      "AB+",
+      "A-",
+      "O-"
+    ],
+    "latitude": 26.9124,
+    "longitude": 75.7873,
+    "is_blood_camp": false,
+    "organized_by": "Rajasthan Health Department",
+    "hours_active": "09:30 AM - 4:00 PM",
+    "start_date": "2025-07-30",
+    "end_date": "2025-07-30",
+    "city": "Jaipur",
+    "state": "Rajasthan"
+  },
+  {
+    "name": "Lucknow Blood Centre",
+    "address": "King George Medical University, Lucknow",
+    "phone": "0522-2251234",
+    "blood_required": [
+      "B+",
+      "O+",
+      "AB+"
+    ],
+    "latitude": 26.8467,
+    "longitude": 80.9462,
+    "is_blood_camp": true,
+    "organized_by": "Uttar Pradesh Health Department",
+    "hours_active": "10:00 AM - 3:00 PM",
+    "start_date": "2025-07-31",
+    "end_date": "2025-07-31",
+    "city": "Lucknow",
+    "state": "Uttar Pradesh"
+  },
+  {
+    "name": "Chandigarh Blood Bank",
+    "address": "PGIMER, Sector 12, Chandigarh",
+    "phone": "0172-2751234",
+    "blood_required": [
+      "A+",
+      "B-",
+      "O-"
+    ],
+    "latitude": 30.7333,
+    "longitude": 76.7794,
+    "is_blood_camp": false,
+    "organized_by": "PGIMER Administration",
+    "hours_active": "08:30 AM - 5:00 PM",
+    "start_date": "2025-08-01",
+    "end_date": "2025-08-01",
+    "city": "Chandigarh",
+    "state": "Chandigarh"
+  },
+  {
+    "name": "Indore Blood Donation Camp",
+    "address": "MY Hospital, Indore",
+    "phone": "0731-2451234",
+    "blood_required": [
+      "O+",
+      "A+",
+      "B+"
+    ],
+    "latitude": 22.7196,
+    "longitude": 75.8577,
+    "is_blood_camp": true,
+    "organized_by": "Madhya Pradesh Health Department",
+    "hours_active": "09:00 AM - 4:00 PM",
+    "start_date": "2025-08-02",
+    "end_date": "2025-08-02",
+    "city": "Indore",
+    "state": "Madhya Pradesh"
+  },
+  {
+    "name": "Patna Blood Bank",
+    "address": "Patna Medical College, Patna",
+    "phone": "0612-2231234",
+    "blood_required": [
+      "AB-",
+      "B+",
+      "O-"
+    ],
+    "latitude": 25.5941,
+    "longitude": 85.1376,
+    "is_blood_camp": false,
+    "organized_by": "Bihar Health Department",
+    "hours_active": "10:00 AM - 4:00 PM",
+    "start_date": "2025-08-03",
+    "end_date": "2025-08-03",
+    "city": "Patna",
+    "state": "Bihar"
+  },
+  {
+    "name": "Bhubaneswar Blood Centre",
+    "address": "SCB Medical College, Bhubaneswar",
+    "phone": "0674-2391234",
+    "blood_required": [
+      "A+",
+      "O+",
+      "AB+"
+    ],
+    "latitude": 20.2961,
+    "longitude": 85.8245,
+    "is_blood_camp": true,
+    "organized_by": "Odisha Health Department",
+    "hours_active": "09:30 AM - 3:30 PM",
+    "start_date": "2025-08-04",
+    "end_date": "2025-08-04",
+    "city": "Bhubaneswar",
+    "state": "Odisha"
+  },
+  {
+    "name": "Dehradun Blood Bank",
+    "address": "Doon Hospital, Dehradun",
+    "phone": "0135-2651234",
+    "blood_required": [
+      "B+",
+      "A-",
+      "O+"
+    ],
+    "latitude": 30.3165,
+    "longitude": 78.0322,
+    "is_blood_camp": false,
+    "organized_by": "Uttarakhand Health Department",
+    "hours_active": "09:00 AM - 4:00 PM",
+    "start_date": "2025-08-05",
+    "end_date": "2025-08-05",
+    "city": "Dehradun",
+    "state": "Uttarakhand"
+  },
+  {
+    "name": "Goa Medical College Blood Bank",
+    "address": "Bambolim, Goa",
+    "phone": "0832-2451234",
+    "blood_required": [
+      "O+",
+      "AB+",
+      "B-"
+    ],
+    "latitude": 15.4589,
+    "longitude": 73.8567,
+    "is_blood_camp": true,
+    "organized_by": "Goa Health Department",
+    "hours_active": "08:30 AM - 2:30 PM",
+    "start_date": "2025-08-06",
+    "end_date": "2025-08-06",
+    "city": "Panaji",
+    "state": "Goa"
+  },
+  {
+    "name": "Guwahati Blood Donation Centre",
+    "address": "Gauhati Medical College, Guwahati",
+    "phone": "0361-2541234",
+    "blood_required": [
+      "A+",
+      "O-",
+      "B+"
+    ],
+    "latitude": 26.1445,
+    "longitude": 91.7362,
+    "is_blood_camp": false,
+    "organized_by": "Assam Health Department",
+    "hours_active": "10:00 AM - 4:00 PM",
+    "start_date": "2025-08-07",
+    "end_date": "2025-08-07",
+    "city": "Guwahati",
+    "state": "Assam"
+  },
+  {
+    "name": "Ranchi Blood Bank",
+    "address": "RIMS, Bariatu, Ranchi",
+    "phone": "0651-2541234",
+    "blood_required": [
+      "AB+",
+      "A+",
+      "O+"
+    ],
+    "latitude": 23.3441,
+    "longitude": 85.3096,
+    "is_blood_camp": true,
+    "organized_by": "Jharkhand Health Department",
+    "hours_active": "09:00 AM - 3:00 PM",
+    "start_date": "2025-08-08",
+    "end_date": "2025-08-08",
+    "city": "Ranchi",
+    "state": "Jharkhand"
+  },
+  {
+    "name": "Shillong Blood Donation Camp",
+    "address": "NEIGRIHMS, Shillong",
+    "phone": "0364-2531234",
+    "blood_required": [
+      "B+",
+      "O+",
+      "A-"
+    ],
+    "latitude": 25.5788,
+    "longitude": 91.8933,
+    "is_blood_camp": true,
+    "organized_by": "Meghalaya Health Department",
+    "hours_active": "10:30 AM - 3:30 PM",
+    "start_date": "2025-08-09",
+    "end_date": "2025-08-09",
+    "city": "Shillong",
+    "state": "Meghalaya"
+  },
+  {
+    "name": "Vadodara Blood Donation Camp",
+    "address": "SSG Hospital Campus, Vadodara",
+    "phone": "0265-2456789",
+    "blood_required": [
+      "A+",
+      "O+",
+      "AB+"
+    ],
+    "latitude": 22.3100,
+    "longitude": 73.1900,
+    "is_blood_camp": true,
+    "organized_by": "Vadodara Medical Association",
+    "hours_active": "09:00 AM - 3:00 PM",
+    "start_date": "2025-08-10",
+    "end_date": "2025-08-10",
+    "city": "Vadodara",
+    "state": "Gujarat"
+  },
+  {
+    "name": "Vadodara Central Blood Bank",
+    "address": "Gotri Road, Vadodara",
+    "phone": "0265-2781234",
+    "blood_required": [
+      "B+",
+      "A-",
+      "O-"
+    ],
+    "latitude": 22.3000,
+    "longitude": 73.1700,
+    "is_blood_camp": false,
+    "organized_by": "Red Cross Vadodara",
+    "hours_active": "10:00 AM - 5:00 PM",
+    "start_date": "2025-08-15",
+    "end_date": "2025-08-15",
+    "city": "Vadodara",
+    "state": "Gujarat"
+  },
+  {
+    "name": "Nagpur Blood Bank",
+    "address": "GMCH Campus, Nagpur",
+    "phone": "0712-2451234",
+    "blood_required": [
+      "O+",
+      "B+",
+      "A+"
+    ],
+    "latitude": 21.1458,
+    "longitude": 79.0882,
+    "is_blood_camp": false,
+    "organized_by": "Nagpur Municipal Corporation",
+    "hours_active": "09:30 AM - 4:30 PM",
+    "start_date": "2025-08-12",
+    "end_date": "2025-08-12",
+    "city": "Nagpur",
+    "state": "Maharashtra"
+  },
+  {
+    "name": "Nagpur Mega Blood Camp",
+    "address": "Dikshabhumi, Nagpur",
+    "phone": "0712-2784567",
+    "blood_required": [
+      "AB+",
+      "O-",
+      "B-"
+    ],
+    "latitude": 21.1350,
+    "longitude": 79.0800,
+    "is_blood_camp": true,
+    "organized_by": "Nagpur Blood Donors Club",
+    "hours_active": "08:00 AM - 2:00 PM",
+    "start_date": "2025-08-18",
+    "end_date": "2025-08-18",
+    "city": "Nagpur",
+    "state": "Maharashtra"
+  },
+  {
+    "name": "Nashik Blood Donation Camp",
+    "address": "College Road, Nashik",
+    "phone": "0253-2456789",
+    "blood_required": [
+      "A+",
+      "B+",
+      "O+"
+    ],
+    "latitude": 20.0000,
+    "longitude": 73.7800,
+    "is_blood_camp": true,
+    "organized_by": "Nashik Medical Association",
+    "hours_active": "10:00 AM - 4:00 PM",
+    "start_date": "2025-08-20",
+    "end_date": "2025-08-20",
+    "city": "Nashik",
+    "state": "Maharashtra"
+  },
+  {
+    "name": "Nashik Central Blood Bank",
+    "address": "Civil Hospital, Nashik",
+    "phone": "0253-2781234",
+    "blood_required": [
+      "AB-",
+      "A-",
+      "B-"
+    ],
+    "latitude": 20.0100,
+    "longitude": 73.7900,
+    "is_blood_camp": false,
+    "organized_by": "Nashik Health Department",
+    "hours_active": "09:00 AM - 5:00 PM",
+    "start_date": "2025-08-25",
+    "end_date": "2025-08-25",
+    "city": "Nashik",
+    "state": "Maharashtra"
+  },
+  {
+    "name": "Mysuru Blood Bank",
+    "address": "K.R. Hospital Campus, Mysuru",
+    "phone": "0821-2451234",
+    "blood_required": [
+      "O+",
+      "A+",
+      "B+"
+    ],
+    "latitude": 12.3100,
+    "longitude": 76.6500,
+    "is_blood_camp": false,
+    "organized_by": "Mysuru Medical College",
+    "hours_active": "09:30 AM - 4:30 PM",
+    "start_date": "2025-08-14",
+    "end_date": "2025-08-14",
+    "city": "Mysuru",
+    "state": "Karnataka"
+  },
+  {
+    "name": "Mysuru Mega Blood Camp",
+    "address": "Palace Grounds, Mysuru",
+    "phone": "0821-2784567",
+    "blood_required": [
+      "AB+",
+      "O-",
+      "A-"
+    ],
+    "latitude": 12.3050,
+    "longitude": 76.6550,
+    "is_blood_camp": true,
+    "organized_by": "Lions Club Mysuru",
+    "hours_active": "09:00 AM - 5:00 PM",
+    "start_date": "2025-08-21",
+    "end_date": "2025-08-21",
+    "city": "Mysuru",
+    "state": "Karnataka"
+  },
+  {
+    "name": "Mangaluru Blood Donation Camp",
+    "address": "Wenlock Hospital, Mangaluru",
+    "phone": "0824-2456789",
+    "blood_required": [
+      "B+",
+      "O+",
+      "A+"
+    ],
+    "latitude": 12.8700,
+    "longitude": 74.8800,
+    "is_blood_camp": true,
+    "organized_by": "Mangaluru Medical Association",
+    "hours_active": "10:00 AM - 4:00 PM",
+    "start_date": "2025-08-16",
+    "end_date": "2025-08-16",
+    "city": "Mangaluru",
+    "state": "Karnataka"
+  },
+  {
+    "name": "Mangaluru Central Blood Bank",
+    "address": "Lady Goschen Hospital, Mangaluru",
+    "phone": "0824-2781234",
+    "blood_required": [
+      "AB-",
+      "B-",
+      "O-"
+    ],
+    "latitude": 12.8650,
+    "longitude": 74.8850,
+    "is_blood_camp": false,
+    "organized_by": "Karnataka Health Department",
+    "hours_active": "09:00 AM - 5:00 PM",
+    "start_date": "2025-08-22",
+    "end_date": "2025-08-22",
+    "city": "Mangaluru",
+    "state": "Karnataka"
+  },
+  {
+    "name": "Hubballi Blood Bank",
+    "address": "KIMS Hospital, Hubballi",
+    "phone": "0836-2451234",
+    "blood_required": [
+      "A+",
+      "O+",
+      "B+"
+    ],
+    "latitude": 15.3600,
+    "longitude": 75.1300,
+    "is_blood_camp": false,
+    "organized_by": "Hubballi Medical Association",
+    "hours_active": "09:30 AM - 4:30 PM",
+    "start_date": "2025-08-17",
+    "end_date": "2025-08-17",
+    "city": "Hubballi",
+    "state": "Karnataka"
+  },
+  {
+    "name": "Hubballi Mega Blood Camp",
+    "address": "KLE Ground, Hubballi",
+    "phone": "0836-2784567",
+    "blood_required": [
+      "AB+",
+      "A-",
+      "O-"
+    ],
+    "latitude": 15.3650,
+    "longitude": 75.1350,
+    "is_blood_camp": true,
+    "organized_by": "Rotary Club Hubballi",
+    "hours_active": "09:00 AM - 5:00 PM",
+    "start_date": "2025-08-23",
+    "end_date": "2025-08-23",
+    "city": "Hubballi",
+    "state": "Karnataka"
+  }
+]
