@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
@@ -43,6 +44,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _addressController = TextEditingController();
     _dobController = TextEditingController();
     _loadUserData();
+
+    // Add listener to limit phone number length to 10 digits
+    _phoneController.addListener(() {
+      final text = _phoneController.text;
+      if (text.length > 10) {
+        _phoneController.text = text.substring(0, 10);
+        _phoneController.selection = TextSelection.fromPosition(
+          TextPosition(offset: _phoneController.text.length),
+        );
+      }
+    });
   }
 
   Future<void> _loadUserData() async {
@@ -76,11 +88,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
+    final eighteenYearsAgo = DateTime(DateTime.now().year - 18, DateTime.now().month, DateTime.now().day);
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate ?? DateTime.now(),
+      initialDate: _selectedDate ?? eighteenYearsAgo,
       firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+      lastDate: eighteenYearsAgo, // Ensures user is at least 18
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -120,7 +133,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
         'phone': _phoneController.text.trim(),
         'address': _addressController.text.trim(),
         'gender': _gender,
-        'bloodGroup': _bloodGroup,
         'dob': _selectedDate != null ? Timestamp.fromDate(_selectedDate!) : null,
       });
 
@@ -202,6 +214,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 controller: _nameController,
                 label: "Full Name",
                 icon: Icons.person,
+                validator: (value) =>
+                value == null || value.isEmpty ? "Full Name is required" : null,
               ),
               const SizedBox(height: 20),
               _buildTextFormField(
@@ -216,6 +230,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 label: "Phone Number",
                 icon: Icons.phone,
                 keyboardType: TextInputType.phone,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Phone number is required";
+                  }
+                  // Indian mobile number validation: 10 digits, starts with 6-9
+                  String pattern = r'^[6-9]\d{9}$';
+                  RegExp regExp = RegExp(pattern);
+                  if (!regExp.hasMatch(value)) {
+                    return "Enter a valid 10-digit Indian mobile number";
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 20),
               _buildTextFormField(
@@ -224,6 +251,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 icon: Icons.calendar_today,
                 readOnly: true,
                 onTap: () => _selectDate(context),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Date of Birth is required";
+                  }
+                  if (_selectedDate != null) {
+                    final eighteenYearsAgo = DateTime(DateTime.now().year - 18, DateTime.now().month, DateTime.now().day);
+                    if (_selectedDate!.isAfter(eighteenYearsAgo)) {
+                      return 'You must be at least 18 years old.';
+                    }
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 20),
               _buildDropdown(
@@ -239,7 +278,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 icon: Icons.bloodtype,
                 value: _bloodGroup,
                 items: _bloodGroups,
-                onChanged: (value) => setState(() => _bloodGroup = value!),
+                onChanged: null, // Passing null disables the dropdown
+                enabled: false, // Explicitly disable
               ),
               const SizedBox(height: 20),
               _buildTextFormField(
@@ -247,9 +287,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 label: "Address",
                 icon: Icons.location_on,
                 maxLines: 3,
+                validator: (value) =>
+                value == null || value.isEmpty ? "Address is required" : null,
               ),
               const SizedBox(height: 30),
-              // Save Button with new style
               Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -305,7 +346,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  // Helper widget for consistent TextFormField styling
   Widget _buildTextFormField({
     required String label,
     required IconData icon,
@@ -316,6 +356,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     int? maxLines = 1,
     TextInputType? keyboardType,
     VoidCallback? onTap,
+    String? Function(String?)? validator,
+    List<TextInputFormatter>? inputFormatters,
   }) {
     return TextFormField(
       controller: controller,
@@ -325,19 +367,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
       maxLines: maxLines,
       keyboardType: keyboardType,
       onTap: onTap,
-      decoration: _buildInputDecoration(label, icon),
-      validator: (value) =>
-      value == null || value.isEmpty ? "$label is required" : null,
+      decoration: _buildInputDecoration(label, icon, enabled: enabled),
+      validator: validator,
+      inputFormatters: inputFormatters,
     );
   }
 
-  // Helper widget for consistent DropdownButtonFormField styling
   Widget _buildDropdown({
     required String label,
     required IconData icon,
     required String value,
     required List<String> items,
-    required ValueChanged<String?> onChanged,
+    required ValueChanged<String?>? onChanged,
+    bool enabled = true,
   }) {
     return DropdownButtonFormField<String>(
       value: value,
@@ -347,18 +389,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
           child: Text(item),
         );
       }).toList(),
-      onChanged: onChanged,
-      decoration: _buildInputDecoration(label, icon),
+      onChanged: enabled ? onChanged : null,
+      decoration: _buildInputDecoration(label, icon, enabled: enabled),
     );
   }
 
-  // Centralized InputDecoration for a consistent look
-  InputDecoration _buildInputDecoration(String label, IconData icon) {
+  InputDecoration _buildInputDecoration(String label, IconData icon, {bool enabled = true}) {
     return InputDecoration(
       labelText: label,
-      prefixIcon: Icon(icon, color: const Color(0xFFFF6B6B)),
+      labelStyle: TextStyle(color: enabled ? Colors.grey.shade700 : Colors.grey.shade500),
+      prefixIcon: Icon(icon, color: enabled ? const Color(0xFFFF6B6B) : Colors.grey.shade400),
       filled: true,
-      fillColor: Colors.white,
+      fillColor: enabled ? Colors.white : Colors.grey.shade200,
       contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
@@ -374,7 +416,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: BorderSide(color: Colors.grey.shade200),
+        borderSide: BorderSide(color: Colors.grey.shade300),
       ),
     );
   }

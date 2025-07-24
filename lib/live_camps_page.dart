@@ -26,8 +26,6 @@ class _LiveCampsPageState extends State<LiveCampsPage> with TickerProviderStateM
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
 
-  // ❗ No more static boolean here. We'll use the AnimationManager.
-
   @override
   void initState() {
     super.initState();
@@ -45,7 +43,6 @@ class _LiveCampsPageState extends State<LiveCampsPage> with TickerProviderStateM
       duration: const Duration(milliseconds: 700),
     );
 
-    // ✅ Use the manager to check if the page has already animated.
     if (AnimationManager.instance.hasAnimated('liveCampsPage')) {
       _fadeController.value = 1.0;
       _slideController.value = 1.0;
@@ -87,7 +84,6 @@ class _LiveCampsPageState extends State<LiveCampsPage> with TickerProviderStateM
           isLoading = false;
         });
 
-        // ✅ Trigger the animation here, after data is loaded.
         if (!AnimationManager.instance.hasAnimated('liveCampsPage')) {
           _fadeController.forward();
           _slideController.forward();
@@ -490,6 +486,40 @@ class _LiveCampsPageState extends State<LiveCampsPage> with TickerProviderStateM
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const SliverFillRemaining(
                         child: Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFF6B6B)))));
+                  }
+
+                  // NEW: Check if any filter is applied. If not, show a prompt.
+                  if (selectedState == null && selectedCity == null && selectedDate == null) {
+                    return SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.all(24),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFF6B6B).withOpacity(0.1),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(Icons.search, size: 60, color: Color(0xFFFF6B6B)),
+                            ),
+                            const SizedBox(height: 24),
+                            const Text(
+                              'Find Blood Camps',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2E2E2E)),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'Select a state, city, or date to begin.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 16, color: Color(0xFF9E9E9E)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
                   }
 
                   final filtered = snapshot.data!.docs.where((doc) {

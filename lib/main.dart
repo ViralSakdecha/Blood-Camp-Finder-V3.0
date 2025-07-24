@@ -1,47 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'login_page.dart';
-import 'bottom_nav_screen.dart';
-import 'firebase_options.dart'; // ✅ Don't forget this!
+import 'package:connectivity_plus/connectivity_plus.dart';
+
+import 'bottom_nav_screen.dart'; // Your existing home screen
+import 'firebase_options.dart';
+import 'services/connectivity_service.dart'; // Import the service
+import 'no_internet_screen.dart';   // Import the new screen
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ✅ Correct initialization using platform-specific options
+  // Initialize your connectivity service
+  ConnectivityService.instance.initialize();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-
-  runApp(MyApp(isLoggedIn: isLoggedIn));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final bool isLoggedIn;
-
-  const MyApp({super.key, required this.isLoggedIn});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Blood Camp Finder',
-      debugShowCheckedModeBanner: false,
+      title: 'Blood Bank',
       theme: ThemeData(
-        colorScheme: ColorScheme.light(
-          primary: Colors.red.shade700,
-          secondary: Colors.red.shade400,
-        ),
-        scaffoldBackgroundColor: Colors.white,
-        useMaterial3: true,
+        primarySwatch: Colors.red,
+        scaffoldBackgroundColor: Colors.grey[50],
       ),
-      home: isLoggedIn ? const BottomNavScreen() : const LoginPage(),
-      routes: {
-        '/home': (_) => const BottomNavScreen(),
-        '/login': (_) => const LoginPage(),
-      },
+      // Use a StreamBuilder to check for internet connection
+      home: StreamBuilder<ConnectivityResult>(
+        stream: ConnectivityService.instance.connectivityStream,
+        initialData: ConnectivityResult.mobile, // Assume connection initially
+        builder: (context, snapshot) {
+          if (snapshot.data == ConnectivityResult.none) {
+            // If no internet, show the NoInternetScreen
+            return const NoInternetScreen();
+          } else {
+            // If there is a connection, show your main app screen
+            return const BottomNavScreen();
+          }
+        },
+      ),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'animation_manager.dart'; // 👈 Import the manager
-import 'login_page.dart';
+import 'auth_page.dart';
 import 'edit_profile_page.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -125,7 +125,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     await FirebaseAuth.instance.signOut();
     if (mounted) {
       Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const LoginPage()),
+        MaterialPageRoute(builder: (_) => const AuthPage()),
             (route) => false,
       );
     }

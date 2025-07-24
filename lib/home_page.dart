@@ -3,11 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 import 'animation_manager.dart'; // 👈 Import the manager
 import 'blood_info_page.dart';
 import 'faq_page.dart';
 import 'about_us_page.dart';
-import 'login_page.dart';
+import 'auth_page.dart';
 import 'blood_camp_details_page.dart';
 // import 'nearby_page.dart';
 
@@ -30,8 +31,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
 
-  // ❗ No more static boolean here. We'll use the AnimationManager.
-
   @override
   void initState() {
     super.initState();
@@ -49,7 +48,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 1500),
     );
 
-    // ✅ Use the manager to check if the page has already animated.
     if (AnimationManager.instance.hasAnimated('homePage')) {
       _fadeController.value = 1.0;
       _slideController.value = 1.0;
@@ -144,7 +142,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           isLoading = false;
         });
 
-        // ✅ Trigger the animation here, after data is loaded.
         if (!AnimationManager.instance.hasAnimated('homePage')) {
           _fadeController.forward();
           _slideController.forward();
@@ -180,9 +177,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   void startAutoSwipe() {
     Future.delayed(const Duration(seconds: 5), () {
-      if (!mounted || _bloodbanks.isEmpty || !_pageController.hasClients)
-        return;
-      final nextIndex = (_currentIndex + 1) % _bloodbanks.length;
+      if (!mounted || _bloodbanks.isEmpty || !_pageController.hasClients) return;
+
+      final int pageViewItemCount = _bloodbanks.length > 10 ? 10 : _bloodbanks.length;
+      if (pageViewItemCount == 0) return;
+
+      final nextIndex = (_currentIndex + 1) % pageViewItemCount;
       _pageController.animateToPage(
         nextIndex,
         duration: const Duration(milliseconds: 500),
@@ -403,12 +403,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           _buildDrawerItem(Icons.logout, "Logout", () async {
             Navigator.pop(context);
             await FirebaseAuth.instance.signOut();
-            // ❗ Removed the line that reset the animation flag.
+            AnimationManager.instance.reset();
             if (!mounted) return;
             Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (_) => const LoginPage()),
-              (Route<dynamic> route) => false,
+              MaterialPageRoute(builder: (_) => const AuthPage()),
+                  (Route<dynamic> route) => false,
             );
           }),
         ],
@@ -543,227 +543,203 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (didPop) {
-        if (didPop) return;
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Are you sure you want to quit?'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: const Text('No'),
+    final int pageViewItemCount = _bloodbanks.length > 10 ? 10 : _bloodbanks.length;
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8F9FA),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFFFF8A95), Color(0xFFFF6B6B)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title: const Text(
+          "Blood Camp Finder",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+        centerTitle: true,
+        foregroundColor: Colors.white,
+      ),
+      drawer: _buildDrawer(),
+      body: isLoading
+          ? const Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFF6B6B)),
+        ),
+      )
+          : _bloodbanks.isEmpty
+          ? Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.location_off,
+                color: Colors.grey,
+                size: 80,
               ),
-              TextButton(
-                onPressed: () => SystemNavigator.pop(),
-                child: const Text('Yes'),
+              const SizedBox(height: 20),
+              const Text(
+                "Could Not Find Location",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF2E2E2E),
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                "Please enable location services and try again.",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+              const SizedBox(height: 30),
+              ElevatedButton.icon(
+                icon: const Icon(Icons.refresh, color: Colors.white),
+                label: const Text(
+                  "Retry",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: fetchDataAndSortByLocation,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFF6B6B),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30,
+                    vertical: 15,
+                  ),
+                ),
               ),
             ],
           ),
-        );
-      },
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF8F9FA),
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFFFF8A95), Color(0xFFFF6B6B)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-          ),
-          title: const Text(
-            "Blood Camp Finder",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-          ),
-          centerTitle: true,
-          foregroundColor: Colors.white,
         ),
-        drawer: _buildDrawer(),
-        body: isLoading
-            ? const Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFF6B6B)),
+      )
+          : FadeTransition(
+        opacity: _fadeAnimation,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: SlideTransition(
+            position: _slideAnimation,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Hi, $userName! 👋",
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF2E2E2E),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      "Find the nearest blood donation camps",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFF9E9E9E),
+                      ),
+                    ),
+                  ],
                 ),
-              )
-            : _bloodbanks.isEmpty
-            ? Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.location_off,
-                        color: Colors.grey,
-                        size: 80,
+                const SizedBox(height: 24),
+                Column(
+                  children: [
+                    SizedBox(
+                      height: 320,
+                      child: PageView.builder(
+                        controller: _pageController,
+                        itemCount: pageViewItemCount,
+                        onPageChanged: (index) =>
+                            setState(() => _currentIndex = index),
+                        itemBuilder: (context, index) =>
+                            _buildBloodBankCard(_bloodbanks[index]),
                       ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        "Could Not Find Location",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF2E2E2E),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        "Please enable location services and try again.",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
-                      ),
-                      const SizedBox(height: 30),
-                      ElevatedButton.icon(
-                        icon: const Icon(Icons.refresh, color: Colors.white),
-                        label: const Text(
-                          "Retry",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: fetchDataAndSortByLocation,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFFF6B6B),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        pageViewItemCount,
+                            (index) => Container(
+                          width: 8,
+                          height: 8,
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 4,
                           ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 30,
-                            vertical: 15,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: _currentIndex == index
+                                ? const Color(0xFFFF6B6B)
+                                : const Color(
+                              0xFFFF6B6B,
+                            ).withOpacity(0.3),
                           ),
                         ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 32),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Nearest To You",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF2E2E2E),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Column(
+                  children: _bloodbanks
+                      .take(3)
+                      .map((bank) => _buildNearbyBankCard(bank))
+                      .toList(),
+                ),
+                const SizedBox(height: 24),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFFFF8A95), Color(0xFFFF6B6B)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(25),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFFFF6B6B).withOpacity(0.3),
+                        blurRadius: 15,
+                        offset: const Offset(0, 8),
                       ),
                     ],
                   ),
                 ),
-              )
-            : FadeTransition(
-                opacity: _fadeAnimation,
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(20),
-                  child: SlideTransition(
-                    position: _slideAnimation,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Hi, $userName! 👋",
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF2E2E2E),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            const Text(
-                              "Find the nearest blood donation camps",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Color(0xFF9E9E9E),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 24),
-                        Column(
-                          children: [
-                            SizedBox(
-                              height: 320,
-                              child: PageView.builder(
-                                controller: _pageController,
-                                itemCount: _bloodbanks.length > 10
-                                    ? 10
-                                    : _bloodbanks.length,
-                                onPageChanged: (index) =>
-                                    setState(() => _currentIndex = index),
-                                itemBuilder: (context, index) =>
-                                    _buildBloodBankCard(_bloodbanks[index]),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: List.generate(
-                                _bloodbanks.length > 10
-                                    ? 10
-                                    : _bloodbanks.length,
-                                (index) => Container(
-                                  width: 8,
-                                  height: 8,
-                                  margin: const EdgeInsets.symmetric(
-                                    horizontal: 4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: _currentIndex == index
-                                        ? const Color(0xFFFF6B6B)
-                                        : const Color(
-                                            0xFFFF6B6B,
-                                          ).withOpacity(0.3),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 32),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              "Nearest To You",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF2E2E2E),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Column(
-                          children: _bloodbanks
-                              .take(3)
-                              .map((bank) => _buildNearbyBankCard(bank))
-                              .toList(),
-                        ),
-                        const SizedBox(height: 24),
-                        Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFFFF8A95), Color(0xFFFF6B6B)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(25),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFFFF6B6B).withOpacity(0.3),
-                                blurRadius: 15,
-                                offset: const Offset(0, 8),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
