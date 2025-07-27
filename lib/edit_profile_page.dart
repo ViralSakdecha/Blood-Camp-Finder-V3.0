@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -45,7 +46,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _dobController = TextEditingController();
     _loadUserData();
 
-    // Add listener to limit phone number length to 10 digits
     _phoneController.addListener(() {
       final text = _phoneController.text;
       if (text.length > 10) {
@@ -139,18 +139,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text("Profile updated successfully"),
+            content: Text("Profile updated successfully", style: GoogleFonts.poppins()),
             backgroundColor: Colors.green,
             behavior: SnackBarBehavior.floating,
           ),
         );
-        Navigator.pop(context, true); // Pop and signal success
+        Navigator.pop(context, true);
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Failed to update profile: $e"),
+            content: Text("Failed to update profile: $e", style: GoogleFonts.poppins()),
             backgroundColor: Colors.red,
             behavior: SnackBarBehavior.floating,
           ),
@@ -188,9 +188,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
           ),
         ),
-        title: const Text(
+        title: Text(
           "Edit Profile",
-          style: TextStyle(
+          style: GoogleFonts.poppins(
             color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -214,8 +214,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 controller: _nameController,
                 label: "Full Name",
                 icon: Icons.person,
-                validator: (value) =>
-                value == null || value.isEmpty ? "Full Name is required" : null,
+                validator: (value) => value == null || value.isEmpty
+                    ? "Full Name is required"
+                    : null,
               ),
               const SizedBox(height: 20),
               _buildTextFormField(
@@ -235,7 +236,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   if (value == null || value.isEmpty) {
                     return "Phone number is required";
                   }
-                  // Indian mobile number validation: 10 digits, starts with 6-9
                   String pattern = r'^[6-9]\d{9}$';
                   RegExp regExp = RegExp(pattern);
                   if (!regExp.hasMatch(value)) {
@@ -249,14 +249,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 controller: _dobController,
                 label: "Date of Birth",
                 icon: Icons.calendar_today,
-                readOnly: true,
-                onTap: () => _selectDate(context),
+                readOnly: true, // Makes the field non-editable
+                onTap: () => _selectDate(context), // Triggers calendar on tap
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Date of Birth is required";
                   }
                   if (_selectedDate != null) {
-                    final eighteenYearsAgo = DateTime(DateTime.now().year - 18, DateTime.now().month, DateTime.now().day);
+                    final eighteenYearsAgo = DateTime(
+                        DateTime.now().year - 18,
+                        DateTime.now().month,
+                        DateTime.now().day);
                     if (_selectedDate!.isAfter(eighteenYearsAgo)) {
                       return 'You must be at least 18 years old.';
                     }
@@ -265,7 +268,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 },
               ),
               const SizedBox(height: 20),
-              _buildDropdown(
+              _buildModernDropdown(
                 label: "Gender",
                 icon: Icons.wc,
                 value: _gender,
@@ -273,13 +276,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 onChanged: (value) => setState(() => _gender = value!),
               ),
               const SizedBox(height: 20),
-              _buildDropdown(
+              _buildModernDropdown(
                 label: "Blood Group",
                 icon: Icons.bloodtype,
                 value: _bloodGroup,
                 items: _bloodGroups,
-                onChanged: null, // Passing null disables the dropdown
-                enabled: false, // Explicitly disable
+                onChanged: null,
+                enabled: false,
               ),
               const SizedBox(height: 20),
               _buildTextFormField(
@@ -287,8 +290,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 label: "Address",
                 icon: Icons.location_on,
                 maxLines: 3,
-                validator: (value) =>
-                value == null || value.isEmpty ? "Address is required" : null,
+                validator: (value) => value == null || value.isEmpty
+                    ? "Address is required"
+                    : null,
               ),
               const SizedBox(height: 30),
               Container(
@@ -323,7 +327,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       : const Icon(Icons.save, color: Colors.white),
                   label: Text(
                     _isSaving ? "Saving..." : "Save Profile",
-                    style: const TextStyle(
+                    style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -351,29 +355,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
     required IconData icon,
     TextEditingController? controller,
     String? initialValue,
-    bool readOnly = false,
     bool enabled = true,
     int? maxLines = 1,
     TextInputType? keyboardType,
-    VoidCallback? onTap,
     String? Function(String?)? validator,
     List<TextInputFormatter>? inputFormatters,
+    bool readOnly = false,
+    VoidCallback? onTap,
   }) {
     return TextFormField(
       controller: controller,
       initialValue: initialValue,
-      readOnly: readOnly,
       enabled: enabled,
       maxLines: maxLines,
       keyboardType: keyboardType,
-      onTap: onTap,
+      style: GoogleFonts.poppins(),
       decoration: _buildInputDecoration(label, icon, enabled: enabled),
       validator: validator,
       inputFormatters: inputFormatters,
+      readOnly: readOnly,
+      onTap: onTap,
     );
   }
 
-  Widget _buildDropdown({
+  Widget _buildModernDropdown({
     required String label,
     required IconData icon,
     required String value,
@@ -386,25 +391,67 @@ class _EditProfilePageState extends State<EditProfilePage> {
       items: items.map((item) {
         return DropdownMenuItem(
           value: item,
-          child: Text(item),
+          child: Text(item, style: GoogleFonts.poppins()),
         );
       }).toList(),
       onChanged: enabled ? onChanged : null,
-      decoration: _buildInputDecoration(label, icon, enabled: enabled),
+      dropdownColor: Colors.white,
+      borderRadius: BorderRadius.circular(16),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: GoogleFonts.poppins(
+            color: enabled ? Colors.grey.shade700 : Colors.grey.shade500),
+        prefixIcon: Container(
+          margin: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: enabled
+                ? const Color(0xFFFF6B6B).withOpacity(0.1)
+                : Colors.grey.shade300,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon,
+              color: enabled ? const Color(0xFFFF6B6B) : Colors.grey.shade400,
+              size: 20),
+        ),
+        filled: true,
+        fillColor: enabled ? Colors.white : Colors.grey.shade200,
+        contentPadding:
+        const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: Color(0xFFFF6B6B), width: 2.0),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+      ),
     );
   }
 
-  InputDecoration _buildInputDecoration(String label, IconData icon, {bool enabled = true}) {
+  InputDecoration _buildInputDecoration(String label, IconData icon,
+      {bool enabled = true}) {
     return InputDecoration(
       labelText: label,
-      labelStyle: TextStyle(color: enabled ? Colors.grey.shade700 : Colors.grey.shade500),
-      prefixIcon: Icon(icon, color: enabled ? const Color(0xFFFF6B6B) : Colors.grey.shade400),
+      labelStyle: GoogleFonts.poppins(
+          color: enabled ? Colors.grey.shade700 : Colors.grey.shade500),
+      prefixIcon: Icon(icon,
+          color: enabled ? const Color(0xFFFF6B6B) : Colors.grey.shade400),
       filled: true,
       fillColor: enabled ? Colors.white : Colors.grey.shade200,
       contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: BorderSide.none,
+        borderSide: BorderSide(color: Colors.grey.shade300),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),

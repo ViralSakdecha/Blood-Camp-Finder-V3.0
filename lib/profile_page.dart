@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'animation_manager.dart'; // 👈 Import the manager
+import 'animation_manager.dart';
 import 'auth_page.dart';
 import 'edit_profile_page.dart';
 
@@ -28,8 +28,6 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
 
-  // ❗ No more static boolean here. We'll use the AnimationManager.
-
   @override
   void initState() {
     super.initState();
@@ -47,7 +45,6 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
       duration: const Duration(milliseconds: 1500),
     );
 
-    // ✅ Use the manager to check if the page has already animated.
     if (AnimationManager.instance.hasAnimated('profilePage')) {
       _fadeController.value = 1.0;
       _slideController.value = 1.0;
@@ -82,7 +79,8 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
 
     try {
       final uid = currentUser.uid;
-      final userDoc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      final userDoc =
+      await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
       if (mounted && userDoc.exists) {
         final data = userDoc.data();
@@ -102,7 +100,6 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
         });
       }
     } catch (e) {
-      // You can add a SnackBar here if you want to notify the user of an error.
       print("Error fetching user data: $e");
     } finally {
       if (mounted) {
@@ -110,7 +107,6 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
           isLoading = false;
         });
 
-        // ✅ Trigger the animation here, after data is loaded.
         if (!AnimationManager.instance.hasAnimated('profilePage')) {
           _fadeController.forward();
           _slideController.forward();
@@ -121,14 +117,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
   }
 
   void logout() async {
-    // ❗ Removed the line that reset the animation flag.
+    // FIX: Only sign out and reset animations. Let AuthGate handle navigation.
+    AnimationManager.instance.reset();
     await FirebaseAuth.instance.signOut();
-    if (mounted) {
-      Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const AuthPage()),
-            (route) => false,
-      );
-    }
   }
 
   @override
@@ -208,7 +199,8 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFFFF6B6B).withOpacity(0.3),
+                        color:
+                        const Color(0xFFFF6B6B).withOpacity(0.3),
                         blurRadius: 20,
                         offset: const Offset(0, 10),
                       ),
@@ -267,10 +259,13 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                   title: "Personal Information",
                   icon: Icons.person_outline,
                   children: [
-                    _infoRow(Icons.person, "Full Name", name ?? 'Not set'),
+                    _infoRow(
+                        Icons.person, "Full Name", name ?? 'Not set'),
                     _infoRow(Icons.wc, "Gender", gender ?? 'Not set'),
-                    _infoRow(Icons.cake, "Date of Birth", dob ?? 'Not set'),
-                    _infoRow(Icons.bloodtype, "Blood Group", bloodGroup ?? 'Not set'),
+                    _infoRow(
+                        Icons.cake, "Date of Birth", dob ?? 'Not set'),
+                    _infoRow(Icons.bloodtype, "Blood Group",
+                        bloodGroup ?? 'Not set'),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -282,7 +277,8 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                   children: [
                     _infoRow(Icons.email, "Email", email ?? 'Not set'),
                     _infoRow(Icons.phone, "Phone", phone ?? 'Not set'),
-                    _infoRow(Icons.location_on, "Address", address ?? 'Not set'),
+                    _infoRow(Icons.location_on, "Address",
+                        address ?? 'Not set'),
                   ],
                 ),
                 const SizedBox(height: 32),
@@ -299,7 +295,8 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                     borderRadius: BorderRadius.circular(25),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFFFF6B6B).withOpacity(0.3),
+                        color:
+                        const Color(0xFFFF6B6B).withOpacity(0.3),
                         blurRadius: 15,
                         offset: const Offset(0, 8),
                       ),
@@ -307,7 +304,8 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                   ),
                   child: ElevatedButton.icon(
                     onPressed: logout,
-                    icon: const Icon(Icons.logout, color: Colors.white),
+                    icon:
+                    const Icon(Icons.logout, color: Colors.white),
                     label: const Text(
                       "Logout",
                       style: TextStyle(
@@ -319,7 +317,8 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.transparent,
                       shadowColor: Colors.transparent,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      padding:
+                      const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25),
                       ),
@@ -366,7 +365,8 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                   colors: [Color(0xFFFF8A95), Color(0xFFFF6B6B)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight),
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              borderRadius:
+              BorderRadius.vertical(top: Radius.circular(20)),
             ),
             child: Row(
               children: [

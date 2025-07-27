@@ -54,7 +54,6 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
   }
 
   Future<void> _initializeMap() async {
-    // This is a combination of your _getCurrentLocation and _fetchNearbyBloodBanks
     try {
       Position position = await _determinePosition();
       if (mounted) {
@@ -166,17 +165,20 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
           userAgentPackageName: 'com.example.blood_camp_finder_project',
         ),
         MarkerLayer(
+          rotate: true,
+          alignment: Alignment.topCenter,
           markers: _nearbyBloodBanks.map((bank) {
             final lat = bank['latitude'];
             final lng = bank['longitude'];
             if (lat is double && lng is double) {
               return Marker(
                 point: LatLng(lat, lng),
-                width: 40,
-                height: 40,
+                // ❗ FIX: Increased marker size
+                width: 60,
+                height: 60,
                 child: GestureDetector(
                   onTap: () => _showBloodBankDetails(bank),
-                  child: const Icon(Icons.location_on, color: Colors.red, size: 35),
+                  child: Image.asset('assets/icon/blood-bank-marker.png'),
                 ),
               );
             }
@@ -185,11 +187,13 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
         ),
         if (_currentLocation != null)
           MarkerLayer(
+            rotate: true,
             markers: [
               Marker(
                 point: _currentLocation!,
-                width: 40,
-                height: 40,
+                // ❗ FIX: Increased marker size
+                width: 50,
+                height: 50,
                 child: const Icon(Icons.my_location, color: Colors.blue, size: 35),
               ),
             ],

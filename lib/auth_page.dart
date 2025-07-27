@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -115,7 +116,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
+        content: Text(message, style: GoogleFonts.poppins()),
         backgroundColor: const Color(0xFFFF6B6B),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -239,7 +240,6 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
       return;
     }
 
-    // Age validation
     final eighteenYearsAgo = DateTime(DateTime.now().year - 18, DateTime.now().month, DateTime.now().day);
     if (_selectedDate!.isAfter(eighteenYearsAgo)) {
       _showSnackBar('You must be at least 18 years old to register.');
@@ -323,70 +323,104 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
     TextInputType keyboardType = TextInputType.text,
     bool obscureText = false,
     Widget? suffixIcon,
-    VoidCallback? onTap,
-    bool readOnly = false,
     int maxLines = 1,
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFF1F1F1),
-        borderRadius: BorderRadius.circular(15),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFFF6B6B).withOpacity(0.1),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
       ),
       child: TextField(
         controller: controller,
         keyboardType: keyboardType,
         obscureText: obscureText,
-        readOnly: readOnly,
         maxLines: maxLines,
-        onTap: onTap,
-        style: const TextStyle(fontSize: 16, color: Color(0xFF2E2E2E)),
+        style: GoogleFonts.poppins(fontSize: 16, color: const Color(0xFF2E2E2E)),
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle:
-          TextStyle(color: const Color(0xFFFF6B6B).withOpacity(0.7)),
-          prefixIcon: Icon(icon, color: const Color(0xFFFF6B6B)),
+          hintStyle: GoogleFonts.poppins(color: Colors.grey.shade400),
+          prefixIcon: Container(
+            margin: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFF6B6B).withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: const Color(0xFFFF6B6B), size: 20),
+          ),
           suffixIcon: suffixIcon,
-          border: InputBorder.none,
-          contentPadding:
-          const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: const BorderSide(color: Color(0xFFFF6B6B), width: 2),
+          ),
+          contentPadding: const EdgeInsets.symmetric(vertical: 20.0),
         ),
       ),
     );
   }
 
-  Widget _buildDropdownField({
-    required String hintText,
-    required IconData icon,
+  Widget _buildModernDropdown({
+    required String label,
     required String? value,
     required List<String> items,
     required Function(String?) onChanged,
+    IconData? icon,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFFF1F1F1),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: DropdownButtonFormField<String>(
-        value: value,
-        decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle:
-          TextStyle(color: const Color(0xFFFF6B6B).withOpacity(0.7)),
-          prefixIcon: Icon(icon, color: const Color(0xFFFF6B6B)),
-          border: InputBorder.none,
+    return DropdownButtonFormField<String>(
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 16),
+        prefixIcon: icon != null
+            ? Container(
+          margin: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: const Color(0xFFFF6B6B).withOpacity(0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: const Color(0xFFFF6B6B), size: 20),
+        )
+            : null,
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding:
+        const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: Color(0xFFFF6B6B), width: 2),
         ),
-        items: items
-            .map((item) => DropdownMenuItem<String>(
-          value: item,
-          child: Text(item,
-              style: const TextStyle(
-                  fontSize: 16, color: Color(0xFF2E2E2E))),
-        ))
-            .toList(),
-        onChanged: onChanged,
-        dropdownColor: Colors.white,
       ),
+      value: value,
+      items: items.map((item) {
+        return DropdownMenuItem(
+            value: item,
+            child: Text(item,
+                style: GoogleFonts.poppins(
+                    color: const Color(0xFF2E2E2E), fontSize: 16)));
+      }).toList(),
+      onChanged: onChanged,
+      dropdownColor: Colors.white,
+      borderRadius: BorderRadius.circular(16),
+      style: GoogleFonts.poppins(color: const Color(0xFF2E2E2E), fontSize: 16),
     );
   }
 
@@ -402,7 +436,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
                 onTap: () => _onTabTapped(0),
                 child: AnimatedDefaultTextStyle(
                   duration: const Duration(milliseconds: 500),
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                     fontSize: 18,
                     fontWeight:
                     _currentPage == 0 ? FontWeight.bold : FontWeight.normal,
@@ -417,7 +451,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
                 onTap: () => _onTabTapped(1),
                 child: AnimatedDefaultTextStyle(
                   duration: const Duration(milliseconds: 500),
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                     fontSize: 18,
                     fontWeight:
                     _currentPage == 1 ? FontWeight.bold : FontWeight.normal,
@@ -497,7 +531,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
                 child: Text(
                   _currentPage == 0 ? "Welcome Back!" : "Create Account",
                   key: ValueKey<int>(_currentPage),
-                  style: const TextStyle(
+                  style: GoogleFonts.poppins(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -507,7 +541,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
               const SizedBox(height: 8),
               Text(
                 _currentPage == 0 ? "Sign in to continue" : "Join us today",
-                style: TextStyle(fontSize: 16, color: Colors.white.withOpacity(0.9)),
+                style: GoogleFonts.poppins(fontSize: 16, color: Colors.white.withOpacity(0.9)),
               ),
             ],
           ),
@@ -622,24 +656,28 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
             keyboardType: TextInputType.phone,
           ),
           const SizedBox(height: 15),
-          _buildInputField(
-            controller: dobController,
-            hintText: "Date of Birth",
-            icon: Icons.calendar_today_outlined,
-            readOnly: true,
+          // ❗ FIX: Wrapped the TextFormField in a GestureDetector
+          GestureDetector(
             onTap: () => _selectDate(context),
+            child: AbsorbPointer(
+              child: _buildInputField(
+                controller: dobController,
+                hintText: "Date of Birth",
+                icon: Icons.calendar_today_outlined,
+              ),
+            ),
           ),
           const SizedBox(height: 15),
-          _buildDropdownField(
-            hintText: "Gender",
+          _buildModernDropdown(
+            label: "Gender",
             icon: Icons.wc_outlined,
             value: _selectedGender,
             items: _genderOptions,
             onChanged: (value) => setState(() => _selectedGender = value),
           ),
           const SizedBox(height: 15),
-          _buildDropdownField(
-            hintText: "Blood Group",
+          _buildModernDropdown(
+            label: "Blood Group",
             icon: Icons.bloodtype_outlined,
             value: _selectedBloodGroup,
             items: _bloodGroupOptions,
@@ -732,7 +770,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
         )
             : Text(
           text,
-          style: const TextStyle(
+          style: GoogleFonts.poppins(
             fontSize: 18,
             fontWeight: FontWeight.bold,
             color: Colors.white,

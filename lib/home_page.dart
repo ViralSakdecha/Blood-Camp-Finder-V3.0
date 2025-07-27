@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
-import 'animation_manager.dart'; // 👈 Import the manager
+import 'animation_manager.dart';
 import 'blood_info_page.dart';
 import 'faq_page.dart';
 import 'about_us_page.dart';
@@ -99,10 +99,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       Position position = await _determinePosition();
       final uid = FirebaseAuth.instance.currentUser?.uid;
       if (uid != null) {
-        final userDoc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(uid)
-            .get();
+        final userDoc =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
         if (mounted) {
           setState(() {
             userName = userDoc.data()?['name'] ?? 'User';
@@ -110,9 +108,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         }
       }
 
-      final snapshot = await FirebaseFirestore.instance
-          .collection('bloodbanks')
-          .get();
+      final snapshot =
+      await FirebaseFirestore.instance.collection('bloodbanks').get();
       List<Map<String, dynamic>> banks = snapshot.docs.map((doc) {
         final data = doc.data();
         final lat = data['latitude'] ?? 0.0;
@@ -179,7 +176,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     Future.delayed(const Duration(seconds: 5), () {
       if (!mounted || _bloodbanks.isEmpty || !_pageController.hasClients) return;
 
-      final int pageViewItemCount = _bloodbanks.length > 10 ? 10 : _bloodbanks.length;
+      final int pageViewItemCount =
+      _bloodbanks.length > 10 ? 10 : _bloodbanks.length;
       if (pageViewItemCount == 0) return;
 
       final nextIndex = (_currentIndex + 1) % pageViewItemCount;
@@ -401,15 +399,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
           const SizedBox(height: 20),
           _buildDrawerItem(Icons.logout, "Logout", () async {
-            Navigator.pop(context);
-            await FirebaseAuth.instance.signOut();
+            // ❗ FIX: Only sign out and reset animations. Let AuthGate handle navigation.
             AnimationManager.instance.reset();
-            if (!mounted) return;
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (_) => const AuthPage()),
-                  (Route<dynamic> route) => false,
-            );
+            await FirebaseAuth.instance.signOut();
           }),
         ],
       ),
@@ -543,7 +535,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final int pageViewItemCount = _bloodbanks.length > 10 ? 10 : _bloodbanks.length;
+    final int pageViewItemCount =
+    _bloodbanks.length > 10 ? 10 : _bloodbanks.length;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
@@ -697,10 +690,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ],
                 ),
                 const SizedBox(height: 32),
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       "Nearest To You",
                       style: TextStyle(
                         fontSize: 20,
@@ -729,7 +722,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     borderRadius: BorderRadius.circular(25),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFFFF6B6B).withOpacity(0.3),
+                        color: const Color(0xFFFF6B6B)
+                            .withOpacity(0.3),
                         blurRadius: 15,
                         offset: const Offset(0, 8),
                       ),
